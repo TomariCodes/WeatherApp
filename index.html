@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skyline Weather</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="header">
+      <h1>Skyline</h1>
+    </header>
+    <main>
+      <section class="search-section" id="searchSection">
+        <input
+          class="city-input"
+          type="text"
+          id="cityInput"
+          placeholder="Enter city name"
+        />
+        <button class="search-button" id="searchButton">Search</button>
+      </section>
+      <section class="weather-display" id="weather-display">
+        <h2 class="city-name" id="cityName">New York</h2>
+        <p class="temperature" id="temperature">28°C</p>
+        <img class="weather-icon" id="weatherIcon" src="" alt="Weather Icon" />
+        <p class="weather-description" id="weatherDescription">Clear</p>
+      </section>
+      <section class="weather-details" id="weather-details">
+        <div class="stat-seperator">
+          <p class="humidity" id="humidity">
+            Humidity: <span id="humidityValue">64%</span>
+          </p>
+        </div>
+
+        <div class="stat-seperator">
+          <p class="wind-speed" id="windSpeed">
+            Wind Speed: <span id="windSpeedValue"></span>7 mph
+          </p>
+        </div>
+
+        <div class="stat-seperator">
+          <p id="pressure" class="pressure">
+            Pressure: <span id="pressureValue"> 1016hPa</span>
+          </p>
+        </div>
+
+        <div class="stat-seperator">
+          <p class="visibility" id="visibility">
+            Visibility: <span id="visibilityValue">10 Miles</span>
+          </p>
+        </div>
+      </section>
+
+      <section class="forecast-section" id="forecast-section">
+        <h3>5-Day Forecast</h3>
+        <div class="forecast-cards" id="forecastCards"></div>
+      </section>
+    </main>
+    <footer class="footer">
+      <p>&copy; Coded by <a class="footer-link" href="#">Tomari Southern</a></p>
+    </footer>
+    <script src="script.js" type="module"></script>
+  </body>
+</html>
