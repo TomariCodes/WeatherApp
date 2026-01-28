@@ -66,7 +66,7 @@
 /* BODY STYLES */
 
 body {
-  background-color: var(--bg-dark);
+  background-color: var(--bg-light);
   color: var(--text);
   padding: 20px;
   font-family: Arial, sans-serif;
@@ -115,12 +115,17 @@ main {
   margin-left: -14px;
   font-weight: bold;
   font-size: 1rem;
-  color: var(--text);
+  color: var(--bg-light);
+}
+
+.search-button:hover {
+  background-color: var(--secondary);
 }
 
 .weather-display {
   background-color: var(--bg);
-  border: 1px solid var(--border);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-muted);
   padding: 15px;
   border-radius: 8px;
   margin-bottom: 20px;
@@ -149,11 +154,17 @@ main {
   justify-content: center;
   height: 125px;
   width: 125px;
-  border: 1px solid var(--border);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  background-color: var(--bg-light);
+  background-color: var(--bg);
   margin: 10px 0;
   padding: 10px;
+  transition: all 0.2s ease-in-out;
+}
+
+.stat-seperator:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-muted);
 }
 
 .stat-seperator span {
@@ -180,14 +191,21 @@ main {
 
 .forecast-card {
   background-color: var(--bg);
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-muted);
   border-radius: 8px;
-  padding: 10px;
-  width: 120px;
+  padding: 20px;
+  width: 140px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.forecast-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border: none;
+  background-color: var(--bg-dark);
 }
 
 .forecast-card h4 {
@@ -218,6 +236,11 @@ main {
 }
 
 /* MEDIA QUERIES */
+@media (max-width: 600px) {
+  .city-input {
+    width: 250px;
+  }
+}
 
 @media (min-width: 1201px) {
   .weather-display {
@@ -255,7 +278,7 @@ main {
   }
 }
 
-@media (prefers-color-scheme: dark) {
+ @media (prefers-color-scheme: dark) {
   :root {
     --bg-dark: hsl(210 100% 2%);
     --bg: hsl(202 100% 4%);
@@ -272,4 +295,21 @@ main {
     --success: hsl(147 21% 58%);
     --info: hsl(217 34% 65%);
   }
+
+  .search-button {
+    color: var(--text);
+  }
+
+  .weather-display {
+    background-color: var(--bg);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--border-muted);
+    transition: all 0.3s ease-in-out;
+  }
+
+  .weather-display:hover {
+   border: none;
+   background: linear-gradient(to top, var(--bg-dark), var(--bg), var(--bg), rgba(255, 255, 255, 0.1) 100%);
+   
 }
+} 
