@@ -11,10 +11,7 @@ const pressure = document.getElementById("pressure");
 const visibility = document.getElementById("visibility");
 const fDayForecast = document.getElementById("forecastCards");
 
-const API_KEY = "af81607633c493b709882edb6e3b5498";
-const longLatBaseURL = "https://api.openweathermap.org/geo/1.0/direct";
-const weatherBaseURL = "https://api.openweathermap.org/data/2.5/weather";
-const forecastBaseURL = "https://api.openweathermap.org/data/2.5/forecast";
+const backendBaseURL = "https://skyline-weather-proxy.tomari7878.workers.dev/";
 
 cityInput.addEventListener("keyup", (event) => {
   if (event.key === "Enter") {
@@ -27,18 +24,18 @@ cityInput.addEventListener("keyup", (event) => {
 fetchButton.addEventListener("click", () => {
   const city = cityInput.value;
   getCoordinates(city)
-  .then(({ lat, lon }) => {
-    return Promise.all([getWeatherData(lat, lon), getForecastData(lat, lon)]);
-  })
-  .then(([weatherData, forecastData]) => {
-    updateUI(weatherData, forecastData);
-  })
-  .catch((error) => console.error("Error fetching data:", error));
+    .then(({ lat, lon }) => {
+      return Promise.all([getWeatherData(lat, lon), getForecastData(lat, lon)]);
+    })
+    .then(([weatherData, forecastData]) => {
+      updateUI(weatherData, forecastData);
+    })
+    .catch((error) => console.error("Error fetching data:", error));
   cityInput.value = "";
 });
 
 async function getCoordinates(city) {
-  const url = `${longLatBaseURL}?q=${city}&limit=1&appid=${API_KEY}`;
+  const url = `${backendBaseURL}/geo?q=${encodeURIComponent(city)}`;
   const response = await fetch(url);
   const data = await response.json();
   if (data.length === 0) {
@@ -47,7 +44,7 @@ async function getCoordinates(city) {
   return { lat: data[0].lat, lon: data[0].lon };
 }
 async function getWeatherData(lat, lon) {
-  const url = `${weatherBaseURL}?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
+  const url = `${backendBaseURL}/weather?lat=${lat}&lon=${lon}`;
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error(
@@ -59,7 +56,7 @@ async function getWeatherData(lat, lon) {
 }
 
 async function getForecastData(lat, lon) {
-  const url = `${forecastBaseURL}?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
+  const url = `${backendBaseURL}/forecast?lat=${lat}&lon=${lon}`;
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error(
@@ -129,7 +126,7 @@ document.getElementById("themeToggle").addEventListener("click", () => {
     document.getElementById("themeToggle").textContent = "☀️";
   } else {
     document.getElementById("themeToggle").textContent = "🌙";
-    document.getElementById("searchButton").style.color = "#dbf3ff";
+    fetchButton.style.color = "#dbf3ff";
   }
   localStorage.setItem("theme", theme);
   renderTheme();

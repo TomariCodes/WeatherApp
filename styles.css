@@ -294,32 +294,16 @@ main {
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg-dark: hsl(210 100% 2%);
-    --bg: hsl(202 100% 4%);
-    --bg-light: hsl(198 70% 8%);
-    --text: hsl(200 100% 93%);
-    --text-muted: hsl(199 43% 68%);
-    --highlight: hsl(199 35% 37%);
-    --border: hsl(198 51% 25%);
-    --border-muted: hsl(196 100% 13%);
-    --primary: hsl(198 70% 65%);
-    --secondary: hsl(21 68% 68%);
-    --danger: hsl(9 31% 65%);
-    --warning: hsl(52 22% 56%);
-    --success: hsl(147 21% 58%);
-    --info: hsl(217 34% 65%);
-  }
 
-  .weather-display {
+
+ html[data-theme="dark"] .weather-display {
     background-color: var(--bg);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
     border: 1px solid var(--border-muted);
     transition: all 0.3s ease-in-out;
   }
 
-  .weather-display:hover {
+ html[data-theme="dark"] .weather-display:hover {
     border: none;
     background: linear-gradient(
       to top,
@@ -329,4 +313,3 @@ main {
       rgba(255, 255, 255, 0.1) 100%
     );
   }
-}
