@@ -12,7 +12,7 @@ const visibility = document.getElementById("visibility");
 const fDayForecast = document.getElementById("forecastCards");
 
 const API_KEY = "af81607633c493b709882edb6e3b5498";
-const longLatBaseURL = "http://api.openweathermap.org/geo/1.0/direct";
+const longLatBaseURL = "https://api.openweathermap.org/geo/1.0/direct";
 const weatherBaseURL = "https://api.openweathermap.org/data/2.5/weather";
 const forecastBaseURL = "https://api.openweathermap.org/data/2.5/forecast";
 
@@ -27,16 +27,14 @@ cityInput.addEventListener("keyup", (event) => {
 fetchButton.addEventListener("click", () => {
   const city = cityInput.value;
   getCoordinates(city)
-    .then(({ lat, lon }) => {
-      console.log(`Coordinates for ${city}: lat=${lat}, lon=${lon}`);
-      return Promise.all([getWeatherData(lat, lon), getForecastData(lat, lon)]);
-    })
-    .then(([weatherData, forecastData]) => {
-      console.log("Weather data:", weatherData);
-      console.log("Forecast data:", forecastData);
-      updateUI(weatherData, forecastData);
-    })
-    .catch((error) => console.error("Error fetching data:", error));
+  .then(({ lat, lon }) => {
+    return Promise.all([getWeatherData(lat, lon), getForecastData(lat, lon)]);
+  })
+  .then(([weatherData, forecastData]) => {
+    updateUI(weatherData, forecastData);
+  })
+  .catch((error) => console.error("Error fetching data:", error));
+  cityInput.value = "";
 });
 
 async function getCoordinates(city) {
@@ -76,7 +74,7 @@ function updateUI(data, forecastData) {
   cityName.textContent = data.name;
   temperature.textContent = `${data.main.temp} °C`;
   weatherDescription.textContent = data.weather[0].description;
-  weatherIcon.src = `http://openweathermap.org/img/wn/${data.weather[0].icon}.png`;
+  weatherIcon.src = `https://openweathermap.org/img/wn/${data.weather[0].icon}.png`;
   humidity.textContent = `Humidity: ${data.main.humidity}%`;
   windSpeed.textContent = `Wind Speed: ${data.wind.speed} m/s`;
   pressure.textContent = `Pressure: ${data.main.pressure} hPa`;
@@ -93,7 +91,7 @@ function updateUI(data, forecastData) {
       card.innerHTML = `
       <h4 class="no-wrap">${date.toDateString()}</h4>
       <p class="no-wrap">Temp: ${forecast.main.temp} °C</p>
-      <img src="http://openweathermap.org/img/wn/${forecast.weather[0].icon}.png" alt="${forecast.weather[0].description}">
+      <img src="https://openweathermap.org/img/wn/${forecast.weather[0].icon}.png" alt="${forecast.weather[0].description}">
       <p class="no-wrap">${forecast.weather[0].description}</p>
 `;
       fDayForecast.appendChild(card);
@@ -103,5 +101,45 @@ function updateUI(data, forecastData) {
   }
 }
 
-//https://api.openweathermap.org/data/2.5/weather?newyork&appid=af81607633c493b709882edb6e3b5498
-//http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
+function getTheme() {
+  let theme = localStorage.getItem("theme");
+  if (!theme) {
+    theme = window.matchMedia?.("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+    document.body.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }
+  return theme;
+}
+
+let theme = getTheme();
+
+const renderTheme = () => {
+  if (theme === "light") {
+    document.documentElement.setAttribute("data-theme", "light");
+  } else {
+    document.documentElement.setAttribute("data-theme", "dark");
+  }
+};
+
+document.getElementById("themeToggle").addEventListener("click", () => {
+  theme = theme === "light" ? "dark" : "light";
+  if (theme === "light") {
+    document.getElementById("themeToggle").textContent = "☀️";
+  } else {
+    document.getElementById("themeToggle").textContent = "🌙";
+    document.getElementById("searchButton").style.color = "#dbf3ff";
+  }
+  localStorage.setItem("theme", theme);
+  renderTheme();
+});
+
+window.onload = () => {
+  const defaultCity = "New York City";
+  cityInput.value = defaultCity;
+  fetchButton.click();
+  cityInput.value = "";
+  getTheme();
+  renderTheme();
+};
