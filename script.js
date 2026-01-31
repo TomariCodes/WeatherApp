@@ -69,11 +69,11 @@ async function getForecastData(lat, lon) {
 
 function updateUI(data, forecastData) {
   cityName.textContent = data.name;
-  temperature.textContent = `${data.main.temp} °C`;
+  temperature.textContent = `${data.main.temp} °F`;
   weatherDescription.textContent = data.weather[0].description;
   weatherIcon.src = `https://openweathermap.org/img/wn/${data.weather[0].icon}.png`;
   humidity.textContent = `Humidity: ${data.main.humidity}%`;
-  windSpeed.textContent = `Wind Speed: ${data.wind.speed} m/s`;
+  windSpeed.textContent = `Wind Speed: ${data.wind.speed} mph`;
   pressure.textContent = `Pressure: ${data.main.pressure} hPa`;
   visibility.textContent = `Visibility: ${data.visibility} meters`;
 
@@ -87,7 +87,7 @@ function updateUI(data, forecastData) {
       const date = new Date(forecast.dt * 1000);
       card.innerHTML = `
       <h4 class="no-wrap">${date.toDateString()}</h4>
-      <p class="no-wrap">Temp: ${forecast.main.temp} °C</p>
+      <p class="no-wrap">Temp: ${forecast.main.temp} °F</p>
       <img src="https://openweathermap.org/img/wn/${forecast.weather[0].icon}.png" alt="${forecast.weather[0].description}">
       <p class="no-wrap">${forecast.weather[0].description}</p>
 `;
