@@ -11,7 +11,7 @@ const pressure = document.getElementById("pressure");
 const visibility = document.getElementById("visibility");
 const fDayForecast = document.getElementById("forecastCards");
 
-const backendBaseURL = "https://skyline-weather-proxy.tomari7878.workers.dev/";
+const backendBaseURL = "https://skyline-weather-proxy.tomari7878.workers.dev";
 
 cityInput.addEventListener("keyup", (event) => {
   if (event.key === "Enter") {
