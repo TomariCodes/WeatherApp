@@ -100,10 +100,20 @@ main {
   align-items: center;
 }
 
+/* SEARCH SECTION STYLES */
+
 .search-section {
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.search-bar {
   width: 100%;
   margin-bottom: 20px;
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
 }
@@ -136,6 +146,23 @@ main {
 
 .search-button:hover {
   background-color: var(--secondary);
+}
+
+.status {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  opacity: 0.8;
+  color: var(--text-muted);
+}
+
+.status.loading {
+  opacity: 0.9;
+  color: var(--info);
+}
+
+.status.error {
+  opacity: 1;
+  color: var(--danger);
 }
 
 .weather-display {
@@ -216,6 +243,15 @@ main {
   align-items: center;
   justify-content: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.2s ease-in-out;
+}
+
+.forecast-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.2s ease-in-out;
 }
 
 .forecast-card:hover {
@@ -293,8 +329,6 @@ main {
     height: auto;
   }
 }
-
-
 
  html[data-theme="dark"] .weather-display {
     background-color: var(--bg);

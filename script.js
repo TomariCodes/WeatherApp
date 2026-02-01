@@ -13,6 +13,13 @@ const fDayForecast = document.getElementById("forecastCards");
 
 const backendBaseURL = "https://skyline-weather-proxy.tomari7878.workers.dev";
 
+const statusText = document.getElementById("statusText");
+
+function setStatus(message, type = "") {
+  statusText.textContent = message;
+  statusText.className = `status ${type}`;
+}
+
 cityInput.addEventListener("keyup", (event) => {
   if (event.key === "Enter") {
     fetchButton.click();
@@ -21,22 +28,45 @@ cityInput.addEventListener("keyup", (event) => {
 
 // Fetch Forecast Data Too
 
-fetchButton.addEventListener("click", () => {
-  const city = cityInput.value;
-  getCoordinates(city)
-    .then(({ lat, lon }) => {
-      return Promise.all([getWeatherData(lat, lon), getForecastData(lat, lon)]);
-    })
-    .then(([weatherData, forecastData]) => {
-      updateUI(weatherData, forecastData);
-    })
-    .catch((error) => console.error("Error fetching data:", error));
-  cityInput.value = "";
+fetchButton.addEventListener("click", async () => {
+  const city = cityInput.value.trim();
+  if (!city) {
+  return setStatus("Please enter a city name.", "error");
+  }
+
+  try {
+    setStatus("Fetching weather data...", "loading");
+    fetchButton.disabled = true;
+
+    const { lat, lon } = await getCoordinates(city);
+    const [weatherData, forecastData] = await Promise.all([
+      getWeatherData(lat, lon),
+      getForecastData(lat, lon),
+    ]);
+
+    updateUI(weatherData, forecastData);
+    setStatus("Weather data fetched successfully!");
+    document.querySelectorAll(".forecast-card").forEach((el) => { el.classList.add("visible")});
+
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    setStatus("Couldn't fetch that city. Try another.", "error");
+  } finally {
+    fetchButton.disabled = false;
+    cityInput.value = "";
+  }
 });
 
 async function getCoordinates(city) {
   const url = `${backendBaseURL}/geo?q=${encodeURIComponent(city)}`;
   const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error(
+      `Geocoding API error: ${response.status} ${response.statusText}`,
+    );
+  }
+  
   const data = await response.json();
   if (data.length === 0) {
     throw new Error("City not found");
@@ -76,7 +106,6 @@ function updateUI(data, forecastData) {
   windSpeed.textContent = `Wind Speed: ${data.wind.speed} mph`;
   pressure.textContent = `Pressure: ${data.main.pressure} hPa`;
   visibility.textContent = `Visibility: ${data.visibility} meters`;
-
   // Update 5-day forecast
   fDayForecast.innerHTML = "";
   if (forecastData && forecastData.list) {
@@ -132,11 +161,20 @@ document.getElementById("themeToggle").addEventListener("click", () => {
   renderTheme();
 });
 
+
 window.onload = () => {
-  const defaultCity = "New York City";
-  cityInput.value = defaultCity;
+  if (theme) {
+    renderTheme();
+    if (theme === "light") {
+      document.getElementById("themeToggle").textContent = "☀️";
+    } else {
+      document.getElementById("themeToggle").textContent = "🌙";
+    }
+  }
+  cityInput.value = "New York City";
   fetchButton.click();
-  cityInput.value = "";
-  getTheme();
-  renderTheme();
+  cityInput.focus();
+
+
 };
+
